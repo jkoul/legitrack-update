@@ -5,7 +5,9 @@
   .module("legitrackdc-update", [
     'ui.router',
     'ngResource'
+    'updateLeg'
   ]);
+
   .config([
     "$stateProvider",
     routerFunction
@@ -16,11 +18,7 @@
     .state("Update", {
       url: "/",
       templateUrl: "js/update/main.html",
-    })
-    .state("Update.progress", {
-      url: "/updating",
-      templateUrl: "js/update/progress.html",
-      controller: "UpdateLegislation",
-      controllerAs: "UpdateLeg"
+      controller: "updateLegislation",
+      controllerAs: "updateLeg"
     })
   }
