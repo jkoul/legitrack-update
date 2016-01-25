@@ -15,7 +15,7 @@
       replace: true,
       scope: {
         bill: '='
-      }
+      },
       link: updateProgressFunction
     }
 

@@ -5,20 +5,25 @@
   .module("updateLeg")
   .controller("updateLegislation", [
     "UpdateOld",
-    "UpdateCurrent",
-    "LegislationOld",
-    "LegislationCurrent",
-    "Sessions",
+    // "UpdateCurrent",
+    // "LegislationOld",
+    // "LegislationCurrent",
+    // "Sessions",
+    // "ClearLegislation",
     updateCtrlModels
   ]);
 
-  function updateCtrlModels(UpdateOld, UpdateCurrent, LegislationOld, LegislationCurrent, scope) {
+  function updateCtrlModels(
+    UpdateOld
+    // ClearLegislation
+  ) {
 
-    scope.updateOld = UpdateOld.update();
-    scope.old = LegislationOld.query();
-    scope.current = LegislationCurrent.query();
+    this.updateOld = UpdateOld.update();
+    // scope.old = LegislationOld.query();
+    // scope.current = LegislationCurrent.query();
 
-    scope.sessions = Sessions.query();
+    // this.sessions = Sessions.query();
+    // this.clearFirebase = ClearLegislation.remove();
   }
 
 })()

@@ -1,29 +1,29 @@
-<div class="col-md-6 col-xs-12 orgs">
-  <h2>Legislation Database Stats</h2>
-  <div class="bills-count">
-    <h4>Total Items: {{updateLeg.all.length}}
-    <h3>Number of Items by Session</h3>
-    <div class="sessions" ng-repeat="session in updateLeg.sessions | orderBy:'Id'">
-      <div class="session-data">
-        Council Period {{session.Id}}
-        <span class="sessionyears">({{session.StartDate | date:"YYYY"}}-{{session.EndDate | date:"YYYY"}})</span>:
-        {{updateLeg.all.length | filter:CouncilPeriod==session.Id}}
+<div class="row">
+  <div class="col-md-6 col-xs-12 orgs">
+    <h2>Legislation Database Stats</h2>
+    <!-- <div class="bills-count">
+      <h4>Total Items: {{updateLeg.all.length}}
+      <h3>Number of Items by Session</h3>
+      <div class="sessions" ng-repeat="session in updateLeg.sessions | orderBy:'Id'">
+        <div class="session-data">
+          Council Period {{session.Id}}
+          <span class="sessionyears">({{session.StartDate | date:"YYYY"}}-{{session.EndDate | date:"YYYY"}})</span>:
+          {{updateLeg.all.length | filter:CouncilPeriod==session.Id}}
+        </div>
       </div>
+    </div> -->
+    <div>
+      <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.updateOld">Update Bills from Previous Sessions</button>
+    </div>
+    <div>
+      <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.updateCurrent">Update Bills from Current Session</button>
+    </div>
+    <!-- <update-progress></update-progress> -->
   </div>
-  <div>
-    <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.updateOld">Update Bills from Previous Sessions</button>
-  </div>
-  <div>
-    <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.updateCurrent">Update Bills from Current Session</button>
-  </div>
-  <!-- <progress></progress> -->
-</div>
 
-<div class="col-md-6 col-xs-12 news">
-  <h3>News Section Management</h3>
-  <div class="news-count">
-    Number of Items: <%= @articles.count %>
-    <%= link_to "View List", articles_path, :class => "btn btn-lg btn-primary" %>
-    <%= link_to "Add New Item", new_article_path, :class => "btn btn-lg btn-danger" %>
-</div>
+  <div class="col-md-6 col-xs-12 news">
+    <h2>Another Section Here</h2>
+    <div class="news-count">
+    </div>
+  </div>
 </div>

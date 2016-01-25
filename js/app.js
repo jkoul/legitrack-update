@@ -4,21 +4,25 @@
   angular
   .module("legitrackdc-update", [
     'ui.router',
-    'ngResource'
-    'updateLeg'
-  ]);
+    'ngResource',
+    'updateLeg',
+    'ui.bootstrap',
+  ])
 
   .config([
     "$stateProvider",
+    "$locationProvider",
     routerFunction
   ]);
 
-  function routerFunction($stateProvider) {
+  function routerFunction($stateProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
     $stateProvider
-    .state("Update", {
+    .state("update", {
       url: "/",
       templateUrl: "js/update/main.html",
       controller: "updateLegislation",
       controllerAs: "updateLeg"
     })
   }
+})()

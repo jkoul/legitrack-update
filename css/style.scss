@@ -1,0 +1,215 @@
+$base-font-size: 10px;
+$base-line-height: 24px;
+$rhythm-unit: "rem";
+$rem-with-px-fallback: "true";
+
+$h1-font-size: 3.2  * $base-font-size;
+$h2-font-size: 2.4  * $base-font-size;
+$h3-font-size: 1.8  * $base-font-size;
+$h4-font-size: 1.6  * $base-font-size;
+$h5-font-size: 1.3  * $base-font-size;
+$h6-font-size: 1  * $base-font-size;
+
+// First, let's create some font stacks.
+$times-new-roman: "Times New Roman", Times, Georgia, "DejaVu Serif", serif;
+$times:           Times, "Times New Roman", Georgia, "DejaVu Serif", serif;
+$georgia:         Georgia, "Times New Roman", "DejaVu Serif", serif;
+
+$verdana:         Verdana, Tahoma, "DejaVu Sans", sans-serif;
+$tahoma:          Tahoma, Verdana, "DejaVu Sans", sans-serif;
+$helvetica:       Helvetica, Arial, "Nimbus Sans L", sans-serif;
+$arial:           Arial, Helvetica, "Nimbus Sans L", sans-serif;
+
+// For an explanation of why "sans-serif" is at the end of this list, see
+// http://meyerweb.com/eric/thoughts/2010/02/12/fixed-monospace-sizing/
+$courier:         "Courier New", "DejaVu Sans Mono", monospace, sans-serif;
+
+// Now create some variables for the font stacks we want to use on this site.
+$base-font-family: $verdana; // The font family set on the html element.
+$font-body:        $verdana;
+$font-monospace:   $courier;
+
+// The amount lists, blockquotes and comments are indented.
+$indent-amount: 30px;
+
+
+
+
+// Custom LegiTrack Font Stack
+
+
+@import url(https://fonts.googleapis.com/css?family=Tinos:400,700|Noto+Sans:400,700);
+
+$sans: 'Noto Sans', sans-serif;
+$serif: 'Tinos', serif;
+
+$normal: 400;
+$bold: 700;
+
+
+$colorPrimary: #9E091E;
+$colorSecondary: #f6f6f6;
+
+$background-gray: #EEEEEE;
+$background-cream: #F9F0E8;
+$peach: #D07755;
+
+$black: #000000;
+$gray-1: #333333;
+$gray-2: #666666;
+$gray-3: #999999;
+$gray-4: #CCCCCC;
+$white: #FFFFFF;
+
+
+
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@mixin rem-fallback($property, $values...) {
+  $max: length($values);
+  $pxValues: '';
+  $remValues: '';
+
+  @for $i from 1 through $max {
+    $value: strip-unit(nth($values, $i));
+    $pxValues: #{$pxValues + $value*strip-unit($base-font-size)}px;
+
+    @if $i < $max {
+      $pxValues: #{$pxValues + " "};
+    }
+  }
+
+  @for $i from 1 through $max {
+    $value: strip-unit(nth($values, $i));
+    $remValues: #{$remValues + $value}rem;
+
+    @if $i < $max {
+      $remValues: #{$remValues + " "};
+    }
+  }
+
+  #{$property}: $pxValues;
+  #{$property}: $remValues;
+}
+
+
+//Preferred version of clearfix
+@mixin clearfix(){
+  &:after{
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+//Simple mixin for applying font styles
+@mixin font-weight-color-size($font, $weight, $color, $size) {
+  font-family: $font;
+  font-weight: $weight;
+  color: $color;
+  @include rem-fallback('font-size', $size);
+}
+
+
+
+
+
+
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+// html {
+//   width: 100%;
+// }
+
+body{
+  min-height:100vh;
+  width: 100%;
+  margin: 0 auto;
+  background-color: $colorSecondary;
+  text-align: center;
+  font-family: $sans;
+  font-size: $base-font-size+6;
+  line-height: $base-line-height;
+  @include clearfix;
+}
+
+h1, h2, h3, h4 {
+  font-family: $serif;
+}
+
+
+.header {
+  width: 100%;
+  display: block;
+  // background-image: url('/css/images/banner.png');
+  // background-size: cover;
+  background-color: $gray-1;
+  // position: fixed;
+  z-index: 1111;
+  overflow: hidden;
+
+  .title {
+    margin: 0 auto;
+    position: relative;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    h1 {
+      @include font-weight-color-size($serif, $bold, $colorPrimary, 4.0);
+      text-shadow: 2px 2px $black;
+      .fa-thumbs-up {
+        color: green;
+      }
+      .fa-thumbs-down {
+        color: $colorPrimary;
+      }
+    }
+    h2 {
+      @include font-weight-color-size($serif, $bold, $colorPrimary, 2);
+      text-transform: uppercase;
+    }
+  }
+}
+
+.nav-menu {
+  margin: 0 auto;
+  padding-bottom: 1em;
+
+  ul {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    li {
+      position: relative;
+      background-opacity: 0.4;
+      color: $background-cream;
+      padding: 1em 2em;
+      border: 1px solid $background-cream;
+
+      &:hover {
+        background: darken($background-cream, 10%);
+        color: $colorPrimary;
+        // -webkit-transition: background .8s, color .5s;
+        //   transition: background .8s, color .5s;
+      }
+
+      a {
+
+      }
+      a, a:hover {
+        text-decoration: none;
+        @include font-weight-color-size($serif, $bold, inherit, 2.5);
+      }
+    }
+  }
+}
