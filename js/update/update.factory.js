@@ -18,7 +18,7 @@
     runUpdateCurrent
   ])
 
-  // .factory('LegislationOld', ['$firebaseObject','$firebaseArray', legOld])
+  .factory('LegislationOld', ['$firebaseArray', '$firebaseObject', legislation])
   //
   //
   //
@@ -28,7 +28,7 @@
     var clearFunc = {
       remove: function() {
         var firebaseUrl = "https://legitrack.firebaseio.com";
-        var legRef = new Firebase(firebaseUrl + "/legislation/20");
+        var legRef = new Firebase(firebaseUrl + "/legislation");
         var legDetails = $firebaseArray(legRef);
         legDetails.$loaded().then(function($response) {
           angular.forEach($response, function(bill) {
@@ -55,36 +55,54 @@
     // saved = 0
     var updateFunction = {
       update: function(){
-        // var sessions = [8,9,10,11,12,13,14,15,16,17,18,19,20]
+
         var LimsAll = $resource('http://lims.dccouncil.us/api/v1/Legislation/AdvancedSearch/', {}, {
           search: {method:'POST', isArray:true}
         })
         var LimsDetail = $resource('http://lims.dccouncil.us/api/v1/Legislation/Details/:id', {})
-        var bills = LimsAll.search({"CouncilPeriod":20, "CategoryId":13});
-        bills.$promise.then(function($response){
-          console.log($response);
-          var billsData = $response;
-          angular.forEach(billsData, function(bill){
-            if(bill.CouncilPeriod < 21) {
-              var getBill = LimsDetail.get({id: bill.LegislationNumber});
-              getBill.$promise.then(function($response){
-                var billData = {
-                  "CommitteeMarkup": $response.CommitteeMarkup,
-                  "CongressReview": $response.CongressReview,
-                  "CouncilReview": $response.CouncilReview,
-                  "Hearing": $response.Hearing,
-                  "Legislation": $response.Legislation,
-                  "LinkedLegislations": $response.LinkedLegislations,
-                  "MayorReview": $response.MayorReview,
-                  "OtherDocuments": $response.OtherDocuments,
-                  "VotingSummary": $response.VotingSummary,
-                }
-                var legRef = new Firebase(firebaseUrl + "/legislation/20");
-                console.log(billData);
-                legRef.child(bill.LegislationNumber).set(billData);
-                // saved++
+
+        var sessions = [
+          // 8,9,10,11
+          // 12,13,14,15
+          16,17,18,19,20
+        ];
+        var billCats = [
+        // [1,1]
+        // [1,2],[1,3]
+        // [1,4]
+        // [2,5]
+        // [2,6],[2,7]
+        [2,8],[2,9]
+        // [3,10]
+        // [8,11],[11,13],[13,19]
+      ]
+
+        angular.forEach(sessions, function(session) {
+          angular.forEach(billCats, function(cat) {
+            console.log("Session: " + session + "; Category: " + cat)
+            var bills = LimsAll.search({"CouncilPeriod":session, "CategoryId":cat[0], "SubCategoryId":cat[1]});
+            bills.$promise.then(function($response){
+              console.log($response);
+              var billsData = $response;
+              angular.forEach(billsData, function(bill){
+                var getBill = LimsDetail.get({id: bill.LegislationNumber});
+                getBill.$promise.then(function($response){
+                  var billData = {
+                    "CommitteeMarkup": $response.CommitteeMarkup,
+                    "CongressReview": $response.CongressReview,
+                    "CouncilReview": $response.CouncilReview,
+                    "Hearing": $response.Hearing,
+                    "Legislation": $response.Legislation,
+                    "LinkedLegislations": $response.LinkedLegislations,
+                    "MayorReview": $response.MayorReview,
+                    "OtherDocuments": $response.OtherDocuments,
+                    "VotingSummary": $response.VotingSummary,
+                  };
+                  var legRef = new Firebase(firebaseUrl + "/legislation/CouncilPeriod" + session);
+                  legRef.child(bill.LegislationNumber).set(billData);
+                })
               })
-            }
+            })
           })
         })
       }
@@ -92,18 +110,34 @@
     return updateFunction;
   }
 
+
   function runUpdateCurrent($resource, $firebaseObject, $firebaseArray) {
+
     var LimsAll = $resource('http://lims.dccouncil.us/api/v1/Legislation/AdvancedSearch/', {}, {
       search: {method:'POST', isArray:true}
     })
     var LimsDetail = $resource('http://lims.dccouncil.us/api/v1/Legislation/Details/:id', {})
-    var bills = LimsAll.search({"CouncilPeriod":21});
+
+    var billCats = [
+      [1,1,"Bills"],
+      [1,2,"Bills"],[1,3,"Bills"],
+      [1,4,"Bills"],
+      [2,5,"Other"],
+      [2,6,"Resolutions"],[2,7,"Resolutions"],
+      [2,8,"Resolutions"],[2,9,"Resolutions"],
+      [3,10,"Contracts"],
+      [8,11,"Other"],[11,13,"Other"],[13,19,"Other"]
+    ]
+
     var updateFunction = {
-      update: function(){
-        bills.$promise.then(function($response){
-          var billsData = $response;
-          angular.forEach(billsData, function(bill){
-            if(bill.CouncilPeriod == 21) {
+      updateAll: function(){
+        angular.forEach(billCats, function(cat){
+          console.log("Session: 21; Category: " + cat)
+          var bills = LimsAll.search({"CouncilPeriod":21, "CategoryId":cat[0], "SubCategoryId":cat[1]});
+          bills.$promise.then(function($response){
+            console.log($response);
+            var billsData = $response;
+            angular.forEach(billsData, function(bill){
               var getBill = LimsDetail.get({id: bill.LegislationNumber});
               getBill.$promise.then(function($response){
                 var billData = {
@@ -117,12 +151,38 @@
                   "OtherDocuments": $response.OtherDocuments,
                   "VotingSummary": $response.VotingSummary,
                 }
-                var legRef = new Firebase(firebaseUrl + "/legislation/21");
+                var legRef = new Firebase(firebaseUrl + "/legislation/CouncilPeriod21/" + cat[2]);
                 legRef.child(bill.LegislationNumber).set(billData);
-                console.log($response);
-                // saved++
               })
-            }
+            })
+          })
+        })
+      },
+      updateRecent: function(lastDate){
+        angular.forEach(billCats, function(cat){
+          console.log("Session: 21; Category: " + cat)
+          var bills = LimsAll.search({"CouncilPeriod":21, "CategoryId":cat[0], "SubCategoryId":cat[1], "StartDate":lastDate});
+          bills.$promise.then(function($response){
+            console.log($response);
+            var billsData = $response;
+            angular.forEach(billsData, function(bill){
+              var getBill = LimsDetail.get({id: bill.LegislationNumber});
+              getBill.$promise.then(function($response){
+                var billData = {
+                  "CommitteeMarkup": $response.CommitteeMarkup,
+                  "CongressReview": $response.CongressReview,
+                  "CouncilReview": $response.CouncilReview,
+                  "Hearing": $response.Hearing,
+                  "Legislation": $response.Legislation,
+                  "LinkedLegislations": $response.LinkedLegislations,
+                  "MayorReview": $response.MayorReview,
+                  "OtherDocuments": $response.OtherDocuments,
+                  "VotingSummary": $response.VotingSummary,
+                }
+                var legRef = new Firebase(firebaseUrl + "/legislation/CouncilPeriod21/" + cat[2]);
+                legRef.child(bill.LegislationNumber).set(billData);
+              })
+            })
           })
         })
       }
@@ -140,15 +200,36 @@
   //
   // }
   //
-  function legislation($firebaseArray, $firebaseObject, legRef) {
+  function legislation($firebaseArray, $firebaseObject) {
     var legRef = new Firebase(firebaseUrl + "/legislation");
     var legDetails = $firebaseArray(legRef);
     var legDetail = {
-      query: function() {return legDetails;},
-      get: function(bill) {
+
+      query: function(){
+        return legDetails;
+      },
+      sessionQuery: function(session) {
+        var sessionBills = $firebaseObject(legRef.child("CouncilPeriod" + session.Id));
+          legRef.child("CouncilPeriod" + session.Id).on('value', function(snapshot) {
+            var length = snapshot.numChildren();
+            console.log(length);
+            session.count = length;
+            
+          });
+
+        // console.log(session);
+        // var sessionBills = $firebaseObject(legRef.child(session));
+        // sessionBills.$loaded().then(function($response) {
+        //   console.log($response);
+        //   return $response;
+        //   // return snapshot.val();
+        // })
+      },
+      get: function(bill, session) {
+        // var session =
+        // var legRef = new Firebase(firebaseUrl + "/legislation/" + session);
         return $firebaseObject(legRef.child(bill.$id));
       }
-
     }
     return legDetail;
   };

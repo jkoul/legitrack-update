@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-12 orgs">
+    <h2>Update Master Page</h2>
+    <div class="bills-count">
+      <!-- <h4>Total Items: {{updateLeg.countAll()}} -->
+      <h3>Number of Items by Session</h3>
+      <div class="sessions" ng-repeat="session in updateLeg.sessions | orderBy:'Id'">
+        <div class="session-data">
+          Council Period {{session.Id}}
+          <span class="sessionyears">({{session.StartDate | date:"yyyy"}}-{{session.EndDate | date:"yyyy"}})</span>:
+          {{session.length}}
+        </div>
+      </div>
+    </div>
+    <div>
+      <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.updateOld()">Update Bills from Previous Sessions</button>
+    </div>
+    <div>
+      <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.updateCurrentAll()">Update All Bills from Current Session</button>
+      <!-- placeholder for date input and partial update -->
+    </div>
+    <div>
+      <button type="button" class="btn btn-lg btn-danger" ng-click="updateLeg.clearFirebase()">Remove All Bills</button>
+    </div>
+    <!-- <update-progress></update-progress> -->
+  </div>
