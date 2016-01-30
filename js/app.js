@@ -25,7 +25,7 @@
       controllerAs: "showData"
     })
     .state("update", {
-      url: "/update",
+      // url: "/update",
       templateUrl: "js/update/progress.html",
       controller: "updateLegislation",
       controllerAs: "updateLeg"
