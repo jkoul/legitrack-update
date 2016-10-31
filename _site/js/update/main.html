@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-12 orgs">
+    <h2>Legislation Database Stats</h2>
+    <div class="bills-count">
+      <!-- <h4>Total Items: {{updateLeg.countAll()}} -->
+      <h3>Number of Items by Session</h3>
+      <div class="sessions" ng-repeat="session in showData.sessions | filter:{Id:'!21'} | orderBy:'Id'">
+        <div class="session-data">
+          Council Period {{session.Id}}
+          <span class="sessionyears">({{session.StartDate | date:"yyyy"}}-{{session.EndDate | date:"yyyy"}})</span>:
+          {{session.count}}
+        </div>
+    </div>
+    <div class="current">
+      <h3>Current Session by Category</h3>
+      <h4>Council Period 21:</h4>
+        <ul>
+          <li>Bills: {{}}</li>
+          <li>Resolutions: {{}}</li>
+          <li>Contracts: {{}}</li>
+          <li>Other(*): {{}}</li>
+          <li>TOTAL: {{}}</li>
+        </ul>
+      <div>
+        *"Other" category includes Ceremonial Resolutions
+      </div>
+    </div>
+    <div>
+      <a class="btn btn-lg btn-danger btn-block" data-ui-sref="update">Update Bills</a>
+    </div>
+    <!-- <update-progress></update-progress> -->
+  </div>
+<!--
+  <div class="col-md-6 col-xs-12 news">
+    <h2>Another Section Here</h2>
+    <div class="news-count">
+    </div>
+  </div> -->
+</div>
